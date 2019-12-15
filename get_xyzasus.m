@@ -26,7 +26,7 @@ if isempty(im_size)
 end
 
 % tmp = im(:);
-xyz(:,3) = double(im_vec)*0.001; % Convert to meters
+xyz(:,3) = double(im_vec);%*0.001; % Convert to meters
 xyz(good_inds,3) = alpha*xyz(good_inds,3) + beta;
 xyz(:,1) = (xyz(:,3)/Kx) .* u ;
 xyz(:,2) = (xyz(:,3)/Ky) .* v;
