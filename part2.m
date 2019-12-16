@@ -33,7 +33,7 @@ xyz = cell(length(imglistrgb));
 %% Images load from the given lists
 for i=1:length(imglistrgb)
     imrgb{i} = imread(imglistrgb{i});
-    depth{i} = load(imglistdepth{i});
+    depth{i} = load(imglistdepth{i}); 
 end
 cam = load("calib_asus.mat");
 
@@ -63,8 +63,8 @@ for main=2:length(imglistrgb)
         matchpoints1 = valid_points{checkmatches}(pairs(:,1));
         matchpoints2 = valid_points{main}(pairs(:,2));
 
-        %figure; 
-        %showMatchedFeatures(imrgbd{checkmatches}, imrgbd{main}, matchpoints1, matchpoints2, 'montage');
+        figure; 
+        showMatchedFeatures(imrgbd{checkmatches}, imrgbd{main}, matchpoints1, matchpoints2, 'montage');
         if (length(matchpoints1) < limit_inliers)
             continue
         end
@@ -110,6 +110,7 @@ for main=2:length(imglistrgb)
         %% RANSAC
         for i=1:niterations
             %% Getting the 4 random points
+            %% VERIFIY IF THESE POINTS ARE COPLANAR
             random = randperm(length(match3d_1), 4);
             xyz1_points = match3d_1(random(:), :);
             xyz2_points = match3d_2(random(:), :);
