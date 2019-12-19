@@ -64,8 +64,8 @@ for main=2:length(imglistrgb)
         matchpoints1 = valid_points{checkmatches}(pairs(:,1));
         matchpoints2 = valid_points{main}(pairs(:,2));
 
-        %figure; 
-        %showMatchedFeatures(imrgbd{checkmatches}, imrgbd{main}, matchpoints1, matchpoints2, 'montage');
+        figure; 
+        showMatchedFeatures(imrgbd{checkmatches}, imrgbd{main}, matchpoints1, matchpoints2, 'montage');
         if (length(matchpoints1) < limit_inliers)
             continue
         end
