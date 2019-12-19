@@ -2,14 +2,14 @@
 close all;
 %RANSAC parameters
 niterations = 100;
-errorthreshold = 0.1;
-limit_inliers = 12;
+errorthreshold = 0.15;
+limit_inliers = 6;
 
 %Images load - Remove for teacher's code
 imglistrgb = {'room1/rgb_0000.jpg','room1/rgb_0001.jpg','room1/rgb_0002.jpg','room1/rgb_0003.jpg','room1/rgb_0004.jpg','room1/rgb_0005.jpg','room1/rgb_0006.jpg'};
 imglistdepth = {'room1/depth_0000.mat','room1/depth_0001.mat', 'room1/depth_0002.mat','room1/depth_0003.mat','room1/depth_0004.mat','room1/depth_0005.mat','room1/depth_0006.mat'};
-%imglistrgb = {'board1/rgb_0000.jpg', 'board1/rgb_0001.jpg', 'board1/rgb_0002.jpg', 'board1/rgb_0003.jpg', 'board1/rgb_0004.jpg', 'board1/rgb_0005.jpg', 'board1/rgb_0006.jpg', 'board1/rgb_0007.jpg', 'board1/rgb_0008.jpg', 'board1/rgb_0009.jpg', 'board1/rgb_0010.jpg', 'board1/rgb_0011.jpg', 'board1/rgb_0012.jpg', 'board1/rgb_0013.jpg', 'board1/rgb_0014.jpg'};
-%imglistdepth = {'board1/depth_0000.mat', 'board1/depth_0001.mat', 'board1/depth_0002.mat', 'board1/depth_0003.mat', 'board1/depth_0004.mat', 'board1/depth_0005.mat', 'board1/depth_0006.mat', 'board1/depth_0007.mat', 'board1/depth_0008.mat', 'board1/depth_0009.mat', 'board1/depth_0010.mat', 'board1/depth_0011.mat', 'board1/depth_0012.mat', 'board1/depth_0013.mat', 'board1/depth_0014.mat'};
+%imglistrgb = {'board1/rgb_0000.jpg', 'board1/rgb_0001.jpg', 'board1/rgb_0002.jpg', 'board1/rgb_0003.jpg'};%, 'board1/rgb_0004.jpg', 'board1/rgb_0005.jpg', 'board1/rgb_0006.jpg', 'board1/rgb_0007.jpg', 'board1/rgb_0008.jpg', 'board1/rgb_0009.jpg', 'board1/rgb_0010.jpg', 'board1/rgb_0011.jpg', 'board1/rgb_0012.jpg', 'board1/rgb_0013.jpg', 'board1/rgb_0014.jpg'};
+%imglistdepth = {'board1/depth_0000.mat', 'board1/depth_0001.mat', 'board1/depth_0002.mat', 'board1/depth_0003.mat'};%, 'board1/depth_0004.mat', 'board1/depth_0005.mat', 'board1/depth_0006.mat', 'board1/depth_0007.mat', 'board1/depth_0008.mat', 'board1/depth_0009.mat', 'board1/depth_0010.mat', 'board1/depth_0011.mat', 'board1/depth_0012.mat', 'board1/depth_0013.mat', 'board1/depth_0014.mat'};
 %imglistrgb = {'board2/rgb_0000.jpg', 'board2/rgb_0001.jpg', 'board2/rgb_0002.jpg', 'board2/rgb_0003.jpg', 'board2/rgb_0004.jpg', 'board2/rgb_0005.jpg', 'board2/rgb_0006.jpg'};
 %imglistdepth = {'board2/depth_0000.mat', 'board2/depth_0001.mat', 'board2/depth_0002.mat', 'board2/depth_0003.mat', 'board2/depth_0004.mat', 'board2/depth_0005.mat', 'board2/depth_0006.mat'};
 %imglistrgb = {'labpiv/rgb_image_1.png', 'labpiv/rgb_image_2.png', 'labpiv/rgb_image_3.png', 'labpiv/rgb_image_4.png', 'labpiv/rgb_image_5.png', 'labpiv/rgb_image_6.png', 'labpiv/rgb_image_7.png', 'labpiv/rgb_image_8.png', 'labpiv/rgb_image_9.png', 'labpiv/rgb_image_10.png', 'labpiv/rgb_image_11.png', 'labpiv/rgb_image_12.png', 'labpiv/rgb_image_13.png', 'labpiv/rgb_image_14.png', 'labpiv/rgb_image_15.png', 'labpiv/rgb_image_16.png', 'labpiv/rgb_image_17.png', 'labpiv/rgb_image_18.png', 'labpiv/rgb_image_19.png', 'labpiv/rgb_image_20.png', 'labpiv/rgb_image_21.png', 'labpiv/rgb_image_22.png', 'labpiv/rgb_image_23.png'};
@@ -33,7 +33,7 @@ xyz = cell(length(imglistrgb));
 %% Images load from the given lists
 for i=1:length(imglistrgb)
     imrgb{i} = imread(imglistrgb{i});
-    depth{i} = load(imglistdepth{i});
+    depth{i} = load(imglistdepth{i}); 
 end
 cam = load("calib_asus.mat");
 
@@ -51,12 +51,13 @@ features = cell(length(imglistrgb));
 valid_points = cell(length(imglistrgb));
 matchpoints = cell(length(imglistrgb) - 1, 2);
 
+banana = zeros(8,1);
 %% Detecting features on image 1 and main loop
-pts{1} = detectSURFFeatures(rgb2gray(imrgbd{1}));
-[features{1}, valid_points{1}] = extractFeatures(rgb2gray(imrgbd{1}), pts{1});
+pts{1} = detectSURFFeatures(rgb2gray(imrgb{1}), 'MetricThreshold', 400);
+[features{1}, valid_points{1}] = extractFeatures(rgb2gray(imrgb{1}), pts{1});
 for main=2:length(imglistrgb)
     %% Feature matching done
-    pts{main} = detectSURFFeatures(rgb2gray(imrgbd{main}));
+    pts{main} = detectSURFFeatures(rgb2gray(imrgbd{main}), 'MetricThreshold', 400);
     [features{main}, valid_points{main}] = extractFeatures(rgb2gray(imrgbd{main}), pts{main});
     for checkmatches=1:(main - 1)
         pairs = matchFeatures(features{checkmatches}, features{main});
@@ -81,13 +82,15 @@ for main=2:length(imglistrgb)
         end
         match3d_1 = zeros(k, 3);
         match3d_2 = zeros(k, 3);
+        aux1 = zeros(k, 2);
+        aux2 = zeros(k, 2);
         a=0;
         for i=1:length(matchpoints1)
             if (xyz{checkmatches}(round(matchpoints1.Location(i, 2)), round(matchpoints1.Location(i, 1)), 3) ~= 0)
                 if (xyz{main}(round(matchpoints2.Location(i, 2)), round(matchpoints2.Location(i, 1)), 3) ~= 0)
                     a = a + 1;
-                    %match3d_1(a, 1:2) = matchpoints1.Location(i, :);
-                    %match3d_2(a, 1:2) = matchpoints2.Location(i, :);
+                    aux1(a, 1:2) = matchpoints1.Location(i, :);
+                    aux2(a, 1:2) = matchpoints2.Location(i, :);
                     match3d_1(a, :) = xyz{checkmatches}(round(matchpoints1.Location(i, 2)), round(matchpoints1.Location(i, 1)), :);
                     match3d_2(a, :) = xyz{main}(round(matchpoints2.Location(i, 2)), round(matchpoints2.Location(i, 1)), :);
                 end
@@ -104,15 +107,24 @@ for main=2:length(imglistrgb)
         n_inliers = zeros(1, niterations);
         im1_inliers = zeros(length(match3d_1), 3, niterations);
         im2_inliers = zeros(length(match3d_2), 3, niterations);
+        auxin1 = zeros(length(aux1), 2, niterations);
+        auxin2 = zeros(length(aux2), 2, niterations);
         model = zeros(3, 4, niterations);
         max_inliers = 0;
         index_max_inliers = 0;
+        aux1111 = zeros(4, 3);
+        aux2222 = zeros(4, 3);
+        A1111 = zeros(3, 4);
+        A2222 = zeros(4, 4);
         %% RANSAC
         for i=1:niterations
             %% Getting the 4 random points
-            random = randperm(length(match3d_1), 4);
-            xyz1_points = match3d_1(random(:), :);
-            xyz2_points = match3d_2(random(:), :);
+            %% VERIFIY IF THESE POINTS ARE COPLANAR
+            while det([xyz2_points(:,:) ones(4,1)]') < 10^-4
+                random = randperm(length(match3d_1), 4);
+                xyz1_points = match3d_1(random(:), :);
+                xyz2_points = match3d_2(random(:), :);
+            end
             %% Getting the model
             A = xyz1_points(:,:)';
             B = [xyz2_points(:,:) ones(4,1)]';
@@ -125,14 +137,23 @@ for main=2:length(imglistrgb)
                     n_inliers(i) = n_inliers(i) + 1;
                     im1_inliers(n_inliers(i), :, i) = match3d_1(k, :);
                     im2_inliers(n_inliers(i), :, i) = match3d_2(k, :);
+                    auxin1(n_inliers(i), :, i) = aux1(k, :);
+                    auxin2(n_inliers(i), :, i) = aux2(k, :);
                 end
             end
             if(max_inliers < n_inliers(i))
                 max_inliers = n_inliers(i);
                 index_max_inliers = i;
+                aux1111 = xyz1_points;
+                aux2222 = xyz2_points;
+                A1111 = A;
+                A2222 = B;
             end
         end
         if (max_inliers >= limit_inliers)
+            banana(main, 1) = 1;
+            figure;
+            showMatchedFeatures(imrgbd{checkmatches}, imrgbd{main}, auxin1(1:max_inliers, :, index_max_inliers), auxin2(1:max_inliers, :, index_max_inliers), 'montage');
             break;
         end
     end
@@ -158,23 +179,17 @@ for main=2:length(imglistrgb)
         transforms{main}.R = R;
         transforms{main}.T = T;
     end
-
-    xyz21=R*xyz_array{main}' + repmat(T, 1,480*640);
-
-    pc1 = pointCloud(xyz_array{checkmatches}, 'Color', reshape(imrgbd{checkmatches}, [480*640 3]));
-    pc2 = pointCloud(xyz21', 'Color', reshape(imrgbd{main}, [480*640 3]));
-    %figure;
-    %showPointCloud(pcmerge(pc2,pc1,0.00001));
 end
 
 %% Code to check pointcloud
 pc = cell(length(imglistrgb));
 pc{1} = pointCloud(xyz_array{1}, 'Color', reshape(imrgbd{1}, [480*640 3]));
 pcmmm = pc{1};
-for alfa=2:7%length(imglistrgb)
+figure;
+for alfa=2:length(imglistrgb)
     aux = transforms{alfa}.R*xyz_array{alfa}' +  repmat(transforms{alfa}.T, 1, 480*640);
     pc{alfa} = pointCloud(aux', 'Color', reshape(imrgbd{alfa}, [480*640 3]));
     pcmmm = pcmerge(pc{alfa}, pcmmm, 0.00001);
+    showPointCloud(pcmmm);
+    drawnow;pause;
 end
-figure;
-showPointCloud(pcmmm);
