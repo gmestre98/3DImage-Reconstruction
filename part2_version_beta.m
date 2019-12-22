@@ -33,8 +33,8 @@ close all;
 %imglistrgb = {'newpiv2/rgb_image_1.png', 'newpiv2/rgb_image_2.png', 'newpiv2/rgb_image_3.png', 'newpiv2/rgb_image_4.png', 'newpiv2/rgb_image_5.png', 'newpiv2/rgb_image_6.png', 'newpiv2/rgb_image_7.png', 'newpiv2/rgb_image_8.png', 'newpiv2/rgb_image_9.png'};
 %imglistdepth = {'newpiv2/depth_1.mat', 'newpiv2/depth_2.mat', 'newpiv2/depth_3.mat', 'newpiv2/depth_4.mat', 'newpiv2/depth_5.mat' 'newpiv2/depth_6.mat', 'newpiv2/depth_7.mat', 'newpiv2/depth_8.mat', 'newpiv2/depth_9.mat'};
 
-imglistrgb = {'office/rgb_0000.jpg', 'office/rgb_0001.jpg', 'office/rgb_0002.jpg', 'office/rgb_0003.jpg', 'office/rgb_0004.jpg'};
-imglistdepth = {'office/depth_0000.mat', 'office/depth_0001.mat', 'office/depth_0002.mat', 'office/depth_0003.mat', 'office/depth_0004.mat'};
+%imglistrgb = {'office/rgb_0000.jpg', 'office/rgb_0001.jpg', 'office/rgb_0002.jpg', 'office/rgb_0003.jpg', 'office/rgb_0004.jpg'};
+%imglistdepth = {'office/depth_0000.mat', 'office/depth_0001.mat', 'office/depth_0002.mat', 'office/depth_0003.mat', 'office/depth_0004.mat'};
 %cloud incompleta, tem muitos zeros na profundidade(candeeiro!)!
 %mostrar a imagem rgbd no relatório
 %imagem do que não é nulo é muito pequena, ao contrário dos office de baixo

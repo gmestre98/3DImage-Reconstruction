@@ -2,7 +2,7 @@
 
 close all;
 
-% Images load - Remove for teacher's code
+%% Images load - Remove for teacher's code
 
 %in meters already
 %imglistrgb = {'room1/rgb_0000.jpg','room1/rgb_0001.jpg','room1/rgb_0002.jpg','room1/rgb_0003.jpg','room1/rgb_0004.jpg','room1/rgb_0005.jpg','room1/rgb_0006.jpg'};
@@ -33,8 +33,8 @@ close all;
 %imglistrgb = {'newpiv2/rgb_image_1.png', 'newpiv2/rgb_image_2.png', 'newpiv2/rgb_image_3.png', 'newpiv2/rgb_image_4.png', 'newpiv2/rgb_image_5.png', 'newpiv2/rgb_image_6.png', 'newpiv2/rgb_image_7.png', 'newpiv2/rgb_image_8.png', 'newpiv2/rgb_image_9.png'};
 %imglistdepth = {'newpiv2/depth_1.mat', 'newpiv2/depth_2.mat', 'newpiv2/depth_3.mat', 'newpiv2/depth_4.mat', 'newpiv2/depth_5.mat' 'newpiv2/depth_6.mat', 'newpiv2/depth_7.mat', 'newpiv2/depth_8.mat', 'newpiv2/depth_9.mat'};
 
-%imglistrgb = {'office/rgb_0000.jpg', 'office/rgb_0001.jpg', 'office/rgb_0002.jpg', 'office/rgb_0003.jpg', 'office/rgb_0004.jpg'};
-%imglistdepth = {'office/depth_0000.mat', 'office/depth_0001.mat', 'office/depth_0002.mat', 'office/depth_0003.mat', 'office/depth_0004.mat'};
+imglistrgb = {'office/rgb_0000.jpg', 'office/rgb_0001.jpg', 'office/rgb_0002.jpg', 'office/rgb_0003.jpg', 'office/rgb_0004.jpg'};
+imglistdepth = {'office/depth_0000.mat', 'office/depth_0001.mat', 'office/depth_0002.mat', 'office/depth_0003.mat', 'office/depth_0004.mat'};
 %cloud incompleta, tem muitos zeros na profundidade(candeeiro!)!
 %mostrar a imagem rgbd no relatório
 %imagem do que não é nulo é muito pequena, ao contrário dos office de baixo
@@ -44,8 +44,8 @@ close all;
 %cloud incompleta, tem muitos zeros na profundidade!
 %mostrar a imagem rgbd no relatório
 
-imglistrgb = {'officenmotion/rgb_0000.jpg', 'officenmotion/rgb_0001.jpg', 'officenmotion/rgb_0002.jpg', 'officenmotion/rgb_0003.jpg', 'officenmotion/rgb_0004.jpg', 'officenmotion/rgb_0005.jpg', 'officenmotion/rgb_0006.jpg', 'officenmotion/rgb_0007.jpg', 'officenmotion/rgb_0008.jpg', 'officenmotion/rgb_0009.jpg', 'officenmotion/rgb_0010.jpg', 'officenmotion/rgb_0011.jpg', 'officenmotion/rgb_0012.jpg', 'officenmotion/rgb_0013.jpg', 'officenmotion/rgb_0014.jpg', 'officenmotion/rgb_0015.jpg'};
-imglistdepth = {'officenmotion/depth_0000.mat', 'officenmotion/depth_0001.mat', 'officenmotion/depth_0002.mat', 'officenmotion/depth_0003.mat', 'officenmotion/depth_0004.mat', 'officenmotion/depth_0005.mat', 'officenmotion/depth_0006.mat', 'officenmotion/depth_0007.mat', 'officenmotion/depth_0008.mat', 'officenmotion/depth_0009.mat', 'officenmotion/depth_0010.mat', 'officenmotion/depth_0011.mat', 'officenmotion/depth_0012.mat', 'officenmotion/depth_0013.mat', 'officenmotion/depth_0014.mat', 'officenmotion/depth_0015.mat'};
+%imglistrgb = {'officenmotion/rgb_0000.jpg', 'officenmotion/rgb_0001.jpg', 'officenmotion/rgb_0002.jpg', 'officenmotion/rgb_0003.jpg', 'officenmotion/rgb_0004.jpg', 'officenmotion/rgb_0005.jpg', 'officenmotion/rgb_0006.jpg', 'officenmotion/rgb_0007.jpg', 'officenmotion/rgb_0008.jpg', 'officenmotion/rgb_0009.jpg', 'officenmotion/rgb_0010.jpg', 'officenmotion/rgb_0011.jpg', 'officenmotion/rgb_0012.jpg', 'officenmotion/rgb_0013.jpg', 'officenmotion/rgb_0014.jpg', 'officenmotion/rgb_0015.jpg'};
+%imglistdepth = {'officenmotion/depth_0000.mat', 'officenmotion/depth_0001.mat', 'officenmotion/depth_0002.mat', 'officenmotion/depth_0003.mat', 'officenmotion/depth_0004.mat', 'officenmotion/depth_0005.mat', 'officenmotion/depth_0006.mat', 'officenmotion/depth_0007.mat', 'officenmotion/depth_0008.mat', 'officenmotion/depth_0009.mat', 'officenmotion/depth_0010.mat', 'officenmotion/depth_0011.mat', 'officenmotion/depth_0012.mat', 'officenmotion/depth_0013.mat', 'officenmotion/depth_0014.mat', 'officenmotion/depth_0015.mat'};
 %cloud incompleta, tem muitos zeros na profundidade!
 %mostrar a imagem rgbd no relatório
 %% Return arrays
@@ -74,8 +74,6 @@ for i=1:length(imrgb)
      xyz_array{i}(isnan(xyz_array{i})) = 0;
      imrgbd{i} = get_rgbd(xyz_array{i}, imrgb{i}, cam.R_d_to_rgb, cam.T_d_to_rgb, cam.RGB_cam.K);
      xyz{i} = reshape(xyz_array{i}, [480, 640, 3]);
-     figure
-     imshow(imrgbd{i})
 end
  
 %% Declaration of cell arrays used for feature matching
